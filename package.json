@@ -4,7 +4,7 @@
   "description": "Zero-dependency CLI & Git pre-commit guard that audits newly added diff lines for AI-generated (vibe-coded) secrets, injection bugs, and silent catch traps.",
   "type": "module",
   "bin": {
-    "safe-vibe": "./bin/cli.js"
+    "safe-vibe": "bin/cli.js"
   },
   "files": [
     "bin/",
@@ -33,5 +33,13 @@
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dkhproject/safe-vibe.git"
+  },
+  "homepage": "https://github.com/dkhproject/safe-vibe#readme",
+  "bugs": {
+    "url": "https://github.com/dkhproject/safe-vibe/issues"
   }
 }
