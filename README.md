@@ -1,28 +1,66 @@
-# safe-vibe
+# safe-vibe — AI & Vibe-Coding Security Guard for Git Diffs
+
+AI coding assistants ship fast — and quietly slip in hardcoded API keys, empty `catch {}` blocks, raw SQL interpolation, and `eval()` calls.
+**`safe-vibe`** audits **only your newly added Git diff lines** (`+`) and blocks risky code before it ever reaches `git commit`, with zero external dependencies.
 
 ![Node.js >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-blue)
 ![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-**Zero-dependency Node.js CLI & Git pre-commit guard** that audits only your newly added (`+`) diff lines for common AI-generated ("vibe-coded") security traps, silent error swallowing, injection risks, and leftover debug debris.
+## Installation & Quickstart
+
+Run directly in any Git repository with staged changes, install the pre-commit hook, or install globally:
+
+```sh
+# Audit staged changes without installing
+npx safe-vibe
+
+# Install the non-destructive Git pre-commit hook
+npx safe-vibe install
+
+# Or install globally
+npm install -g safe-vibe
+safe-vibe
+```
 
 ## Why `safe-vibe`?
 
-AI coding assistants move fast—and occasionally leave behind hardcoded keys, empty `catch (e) {}` blocks, raw SQL interpolation, or `TODO: implement` stubs. `safe-vibe` inspects **only** newly added lines (`git diff --cached -U0` or `git diff -U0`) so you get fast, focused feedback right before you commit, without flagging legacy code or drowning in lockfiles.
+| Capability | `safe-vibe` | Traditional Linters (ESLint / Ruff) | Secret Scanners (Gitleaks / TruffleHog) | Heavy SAST Suites (Semgrep / SonarQube) |
+| :--- | :---: | :---: | :---: | :---: |
+| Zero dependencies (`npx`-ready) | ✅ | ❌ | ❌ (Go binary) | ❌ (Python / JVM) |
+| Audits only newly added diff lines (zero legacy noise) | ✅ | ❌ | Partial | Partial |
+| Catches secrets + silent catches + injections + AI stubs together | ✅ | Partial | ❌ (Secrets only) | ✅ (Requires config) |
+| One-command non-destructive `.git/hooks/pre-commit` install | ✅ | Manual / Husky | Manual | Manual / CI |
 
-## Quickstart
+## Terminal Output
 
-Run directly in any Git repository with staged changes:
+When issues are detected in staged changes (`git diff --cached -U0`):
 
-```sh
-npx safe-vibe
+```text
+safe-vibe: Found 3 issue(s) across 18 added staged line(s):
+
+[CRITICAL] src/config.js:14 (secret-openai-key)
+  Potential hardcoded OpenAI API key detected
+  > const apiKey = "sk-00000000000000000000example";
+  Tip: Load OpenAI API keys from process.env or a secrets manager rather than source code.
+
+[HIGH] src/worker.js:42 (silent-empty-catch)
+  Empty catch block silently swallows errors
+  > } catch (err) {}
+  Tip: Log, rethrow, or explicitly handle the caught error instead of leaving catch empty.
+
+[CRITICAL] src/db.js:27 (dangerous-raw-sql)
+  Raw SQL string interpolation or concatenation risks SQL injection
+  > const rows = await db.query(`SELECT * FROM users WHERE id = ${userId}`);
+  Tip: Use parameterized queries or prepared statements ($1, ?) instead of interpolating variables into SQL.
+
+✖ Commit blocked by safe-vibe (2 critical, 1 high)
 ```
 
-Or install globally / as a dev dependency:
+When your staged diff is clean:
 
-```sh
-npm install -g safe-vibe
-safe-vibe
+```text
+✔ Safe to commit — no vibe-coding traps found (audited 12 added staged line(s))
 ```
 
 ### CLI Options & Commands

@@ -1,7 +1,7 @@
 {
   "name": "safe-vibe",
   "version": "0.1.0",
-  "description": "Zero-dependency CLI & pre-commit guard that audits git diffs for AI-generated security and logic pitfalls",
+  "description": "Zero-dependency CLI & Git pre-commit guard that audits newly added diff lines for AI-generated (vibe-coded) secrets, injection bugs, and silent catch traps.",
   "type": "module",
   "bin": {
     "safe-vibe": "./bin/cli.js"
@@ -15,15 +15,20 @@
     "test": "node --test test/test.js"
   },
   "keywords": [
-    "git",
-    "pre-commit",
-    "security",
-    "linter",
-    "secrets",
-    "ai",
+    "ai-coding",
     "vibe-coding",
+    "pre-commit",
+    "git-hooks",
+    "security",
+    "secret-scanner",
+    "static-analysis",
+    "code-audit",
+    "linter",
+    "developer-tools",
+    "devtools",
     "cli",
-    "zero-dependency"
+    "nodejs",
+    "zero-dependencies"
   ],
   "license": "MIT",
   "engines": {
